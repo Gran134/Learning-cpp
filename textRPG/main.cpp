@@ -24,53 +24,60 @@ public:
 };
 
 int main() {
+    srand(time(nullptr));
     Player player;
-    Enemy enemy;
-    
-
-    cout << "A " << enemy.name << " appears!\n";
+    Enemy enemyTemplate;
 
     while(true) {
-        srand(time(nullptr));
-
-        int damagePlayer = player.attack + (rand() % 7 - 3);
-        int damageEnemy = enemy.attack + (rand() % 7 - 3);
-
-        cout <<"1. Attack" << endl << "2. Run" << endl << "3. Stats" << endl;
+        cout << "1. Look for enemies" << endl << "2. Show stats" << endl;
         int choice;
         cin >> choice;
 
         if (choice == 1) {
-            enemy.health -= damagePlayer;
-            cout << "You attac the enemy. " << "The enemy has " << enemy.health << " health." << endl;
-            
-            
-            if (enemy.health > 0) {
-                player.health -= damageEnemy;
-                cout << "The enemy attacks you! You have " << player.health << " health left.\n";
+            Enemy enemy = enemyTemplate;
+            cout << "A " << enemy.name << " appears!\n";
 
+            while(player.health > 0 && enemy.health > 0) {
+                cout << "1. Attack" << endl << "2. Run" << endl;
+                int attackChoice;
+                cin >> attackChoice;
+
+                if (attackChoice == 1) {
+                    int damagePlayer = player.attack + (rand() % 7 - 3);
+                    int damageEnemy = enemy.attack + (rand() % 7 - 3);
+                    enemy.health -= damagePlayer;
+                    cout << "You attack the enemy. The enemy has " << enemy.health << " health." << endl;
+                    
+                    if (enemy.health > 0) {
+                        player.health -= damageEnemy;
+                        cout << "The enemy attacks you! You have " << player.health << " health left.\n";
+                    }
+
+                    if (enemy.health <= 0) {
+                        player.xp = player.xp + enemy.xp;
+                        cout << "Enemy defeated!\n"
+                             << "You gained " << enemy.xp << " XP!" << endl
+                             << "Player XP: " << player.xp << endl;
+                        break;
+                    }
+
+                    else if (player.health <= 0) {
+                        cout << "You died!" << endl;
+                        break;
+                    }
+                }
                 
-            }
-
-            if (enemy.health <= 0) {
-                player.xp = player.xp + enemy.xp;
-                cout << "Enemy defited!\n" << "You gained " << enemy.xp << " xp!" << endl << "Player xp: " << player.xp << " xp" << endl;
-                break;
-            }
-
-            else if (player.health <= 0) {
-                    cout << "You died!";
+                else if (attackChoice == 2) {
+                    cout << "You ran away." << endl;
                     break;
+                }
             }
         }
-        
         else if (choice == 2) {
-            cout << "You ran away" << endl;
-            break;
-        }
-
-        else if (choice == 3) {
-            cout << "Damage: " << player.attack << endl << "Health: " << player.health << endl << "Level: " << player.level << endl << "1. exit" << endl;
+            cout << "Damage: " << player.attack << endl
+                 << "Health: " << player.health << endl
+                 << "Level: " << player.level << endl
+                 << "1. Exit" << endl;
             cin >> choice;
             cout << endl;
             if (choice == 1) {
