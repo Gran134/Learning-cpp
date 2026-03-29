@@ -29,7 +29,9 @@ int main() {
     Enemy enemyTemplate;
 
     while(true) {
-        cout << "1. Look for enemies" << endl << "2. Show stats" << endl;
+        cout << "1. Look for enemies" << endl 
+        << "2. Show stats" << endl 
+        << "9. Exit Game." << endl;
         int choice;
         cin >> choice;
 
@@ -38,7 +40,9 @@ int main() {
             cout << "A " << enemy.name << " appears!\n";
 
             while(player.health > 0 && enemy.health > 0) {
-                cout << "1. Attack" << endl << "2. Run" << endl;
+                cout << "1. Attack" 
+                << endl << "2. Run" 
+                << endl;
                 int attackChoice;
                 cin >> attackChoice;
 
@@ -83,6 +87,10 @@ int main() {
             if (choice == 1) {
                 continue;
             }
+        }
+        else if (choice == 9) {
+            cout << "Stopped!";
+            break;
         }
     }
 }
