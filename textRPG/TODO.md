@@ -1,12 +1,14 @@
 # Text RPG Checklist
 
 ## Player
+
 - [x] Health
 - [x] Attack damage
 - [x] Level
 - [x] Inventory (later)
 
 ## Enemy
+
 - [x] Health
 - [x] Attack
 - [x] Name
@@ -17,6 +19,7 @@
 - [x] Repeat until someone dies
 
 ## Later Upgrades
+
 After the basic version works:
 
 - [x] Random damage (`rand()`)
@@ -25,9 +28,11 @@ After the basic version works:
 - [ ] Save/load system (files)
 - [ ] Skills
 - [ ] XP and leveling
-- [ ] Random enemy spawn
+- [ ] Random enemy spawn when exploring
+- [ ] Healing
 
 ## Build Order
+
 - [x] Make player + enemy
 - [x] Make combat loop
 - [x] Add random damage
@@ -35,6 +40,7 @@ After the basic version works:
 - [ ] Add simple story
 
 ## Learning Goals
+
 - [ ] Classes
 - [ ] Game logic
 - [ ] Structuring code

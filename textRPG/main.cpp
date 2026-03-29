@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
+#include <limits>
 
 using namespace std;
 
@@ -17,10 +18,9 @@ public:
 
 class Enemy {
 public:
-    int health = 100;
-    int attack = 10;
-    int xp = 10;
-    string name = "Goblin";
+    int health = 50;
+    int attack = 5; int xp = 10;
+    string name;
 };
 
 int main() {
@@ -34,12 +34,17 @@ int main() {
         << "9. Exit Game." << endl;
         int choice;
         cin >> choice;
+        if (cin.fail()) {
+            cout << "Expected a number!" << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        else if (choice == 1) {
+            Enemy goblin = enemyTemplate;
+            goblin.name = "goblin";
+            cout << "A " << goblin.name << " appears!\n";
 
-        if (choice == 1) {
-            Enemy enemy = enemyTemplate;
-            cout << "A " << enemy.name << " appears!\n";
-
-            while(player.health > 0 && enemy.health > 0) {
+            while(player.health > 0 && goblin.health > 0) {
                 cout << "1. Attack" 
                 << endl << "2. Run" 
                 << endl;
@@ -48,19 +53,19 @@ int main() {
 
                 if (attackChoice == 1) {
                     int damagePlayer = player.attack + (rand() % 7 - 3);
-                    int damageEnemy = enemy.attack + (rand() % 7 - 3);
-                    enemy.health -= damagePlayer;
-                    cout << "You attack the enemy. The enemy has " << enemy.health << " health." << endl;
+                    int damageEnemy = goblin.attack + (rand() % 7 - 3);
+                    goblin.health -= damagePlayer;
+                    cout << "You attack the enemy. The enemy has " << goblin.health << " health." << endl;
                     
-                    if (enemy.health > 0) {
+                    if (goblin.health > 0) {
                         player.health -= damageEnemy;
                         cout << "The enemy attacks you! You have " << player.health << " health left.\n";
                     }
 
-                    if (enemy.health <= 0) {
-                        player.xp = player.xp + enemy.xp;
+                    if (goblin.health <= 0) {
+                        player.xp = player.xp + goblin.xp;
                         cout << "Enemy defeated!\n"
-                             << "You gained " << enemy.xp << " XP!" << endl
+                             << "You gained " << goblin.xp << " XP!" << endl
                              << "Player XP: " << player.xp << endl;
                         break;
                     }
@@ -92,5 +97,11 @@ int main() {
             cout << "Stopped!";
             break;
         }
+
+        else {
+            cout << "That is not an option";
+        }
+        
     }
+    return 0;
 }
