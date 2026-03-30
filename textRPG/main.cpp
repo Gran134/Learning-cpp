@@ -4,6 +4,8 @@
 #include <ctime>
 #include <vector>
 #include <limits>
+#include <list>
+#include <random>
 
 using namespace std;
 
@@ -18,8 +20,9 @@ public:
 
 class Enemy {
 public:
-    int health = 50;
-    int attack = 5; int xp = 10;
+    int health;
+    int attack;
+    int xp;
     string name;
 };
 
@@ -42,9 +45,25 @@ int main() {
         else if (choice == 1) {
             Enemy goblin = enemyTemplate;
             goblin.name = "goblin";
-            cout << "A " << goblin.name << " appears!\n";
+            goblin.health = 75;
+            goblin.attack = 7;
+            goblin.xp = 10;
 
-            while(player.health > 0 && goblin.health > 0) {
+            Enemy skeleton = enemyTemplate;
+            skeleton.name = "skeleton";
+            skeleton.health = 50;
+            skeleton.attack = 5;
+            skeleton.xp = 5;
+
+            vector<Enemy> enemies {"goblin", "skeleton"};
+            int randomEnemy = rand() % enemies.size();
+            Enemy currnetEnemy = enemies[randomEnemy];
+
+            
+            cout << "A " << currnetEnemy.name <<" appears!\n";
+            
+
+            while(player.health > 0 && currnetEnemy.health > 0) {
                 cout << "1. Attack" 
                 << endl << "2. Run" 
                 << endl;
@@ -53,20 +72,21 @@ int main() {
 
                 if (attackChoice == 1) {
                     int damagePlayer = player.attack + (rand() % 7 - 3);
-                    int damageEnemy = goblin.attack + (rand() % 7 - 3);
-                    goblin.health -= damagePlayer;
-                    cout << "You attack the enemy. The enemy has " << goblin.health << " health." << endl;
+                    int damageEnemy = currnetEnemy.attack + (rand() % 7 - 3);
+                    currnetEnemy.health -= damagePlayer;
+
+                    cout << "You attack the enemy. The enemy has " << currnetEnemy.health << " health." << endl;
                     
-                    if (goblin.health > 0) {
+                    if (currnetEnemy.health > 0) {
                         player.health -= damageEnemy;
                         cout << "The enemy attacks you! You have " << player.health << " health left.\n";
                     }
 
-                    if (goblin.health <= 0) {
-                        player.xp = player.xp + goblin.xp;
+                    if (currnetEnemy.health <= 0) {
+                        player.xp = player.xp + currnetEnemy.xp;
                         cout << "Enemy defeated!\n"
                              << "You gained " << goblin.xp << " XP!" << endl
-                             << "Player XP: " << player.xp << endl;
+                             << "Player XP: " << currnetEnemy.xp << endl;
                         break;
                     }
 
