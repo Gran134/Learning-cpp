@@ -1,11 +1,7 @@
 #include <iostream>
 #include <string>
-#include <cstdlib>
-#include <ctime>
 #include <vector>
 #include <limits>
-#include <list>
-#include <random>
 
 using namespace std;
 
@@ -26,102 +22,119 @@ public:
     string name;
 };
 
-int main() {
-    srand(time(nullptr));
-    Player player;
+void showMenu() {
+    cout << "1. Look for enemies" << endl 
+    << "2. Show stats" << endl 
+    << "9. Exit Game." << endl;
+}
+
+void showStats(const Player& player) {
+    cout << "Damage: " << player.attack << endl
+    << "Health: " << player.health << endl
+    << "Level: " << player.level << endl;
+}
+
+Enemy createRandomEnemy() {
     Enemy enemyTemplate;
 
-    while(true) {
-        cout << "1. Look for enemies" << endl 
-        << "2. Show stats" << endl 
-        << "9. Exit Game." << endl;
-        int choice;
-        cin >> choice;
+    Enemy goblin = enemyTemplate;
+    goblin.name = "goblin";
+    goblin.health = 75;
+    goblin.attack = 7;
+    goblin.xp = 10;
+
+    Enemy skeleton = enemyTemplate;
+    skeleton.name = "skeleton";
+    skeleton.health = 50;
+    skeleton.attack = 5;
+    skeleton.xp = 5;
+
+    vector<Enemy> enemies {goblin, skeleton};
+    int randomEnemy = rand() % enemies.size();
+    
+    return enemies[randomEnemy];
+}
+int readInt() {
+    int value;
+
+    while (true) {
+        cin >> value;
+
         if (cin.fail()) {
             cout << "Expected a number!" << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
-        else if (choice == 1) {
-            Enemy goblin = enemyTemplate;
-            goblin.name = "goblin";
-            goblin.health = 75;
-            goblin.attack = 7;
-            goblin.xp = 10;
-
-            Enemy skeleton = enemyTemplate;
-            skeleton.name = "skeleton";
-            skeleton.health = 50;
-            skeleton.attack = 5;
-            skeleton.xp = 5;
-
-            vector<Enemy> enemies {"goblin", "skeleton"};
-            int randomEnemy = rand() % enemies.size();
-            Enemy currnetEnemy = enemies[randomEnemy];
-
-            
-            cout << "A " << currnetEnemy.name <<" appears!\n";
-            
-
-            while(player.health > 0 && currnetEnemy.health > 0) {
-                cout << "1. Attack" 
-                << endl << "2. Run" 
-                << endl;
-                int attackChoice;
-                cin >> attackChoice;
-
-                if (attackChoice == 1) {
-                    int damagePlayer = player.attack + (rand() % 7 - 3);
-                    int damageEnemy = currnetEnemy.attack + (rand() % 7 - 3);
-                    currnetEnemy.health -= damagePlayer;
-
-                    cout << "You attack the enemy. The enemy has " << currnetEnemy.health << " health." << endl;
-                    
-                    if (currnetEnemy.health > 0) {
-                        player.health -= damageEnemy;
-                        cout << "The enemy attacks you! You have " << player.health << " health left.\n";
-                    }
-
-                    if (currnetEnemy.health <= 0) {
-                        player.xp = player.xp + currnetEnemy.xp;
-                        cout << "Enemy defeated!\n"
-                             << "You gained " << goblin.xp << " XP!" << endl
-                             << "Player XP: " << currnetEnemy.xp << endl;
-                        break;
-                    }
-
-                    else if (player.health <= 0) {
-                        cout << "You died!" << endl;
-                        break;
-                    }
-                }
-                
-                else if (attackChoice == 2) {
-                    cout << "You ran away." << endl;
-                    break;
-                }
-            }
-        }
-        else if (choice == 2) {
-            cout << "Damage: " << player.attack << endl
-                 << "Health: " << player.health << endl
-                 << "Level: " << player.level << endl
-                 << "1. Exit" << endl;
-            cin >> choice;
-            cout << endl;
-            if (choice == 1) {
-                continue;
-            }
-        }
-        else if (choice == 9) {
-            cout << "Stopped!";
-            break;
-        }
-
         else {
-            cout << "That is not an option";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return value;
+        }
+    }
+}
+
+void fightEnemy(Player& player, Enemy currentEnemy) {
+    cout << "A " << currentEnemy.name <<" appears!\n";
+    
+    while (player.health > 0 && currentEnemy.health > 0) {
+        cout << "1. Attack" 
+        << endl << "2. Run" 
+        << endl;
+
+        int attackChoice = readInt();
+
+        if (attackChoice == 1) {
+            int dammagePlayer = player.attack + (rand() % 7 - 3);
+            int damageEnemy = currentEnemy.attack + (rand() % 7 - 3);
+            currentEnemy.health -= player.attack;
+
+            cout << "You attack the enemy. The enemy has " << currentEnemy.health << " health." << endl;
+            
+            if (currentEnemy.health > 0) {
+                player.health -= damageEnemy;
+                cout << "The enemy attacks you! You have " << player.health << " health left.\n";
+            }
+            if (currentEnemy.health <= 0) {
+                player.xp = player.xp + currentEnemy.xp;
+                cout << "Enemy defeated!\n"
+                        << "You gained " << currentEnemy.xp << " XP!" << endl
+                        << "Player XP: " << player.xp << endl;
+            }
+            else if (player.health <= 0) {
+                cout << "You died!" << endl;
+                break;
+            }
         }
         
+        else if (attackChoice == 2) {
+            cout << "You ran away." << endl;
+            break;
+        }
+    }
+}
+
+int main() {
+    srand(time(nullptr));
+    Player player;
+
+    while(true) {
+        showMenu();
+
+        int choice = readInt();
+
+        if (choice == 1) {
+            Enemy currentEnemy = createRandomEnemy();
+            fightEnemy(player, currentEnemy);
+        }
+        else if (choice == 2) {
+            showStats(player);
+        }
+        else if (choice == 9) {
+            cout << "Stopped!" << endl;
+            break;
+        }
+        else {
+            cout << "That is not an option!" << endl;
+        }
     }
     return 0;
 }
