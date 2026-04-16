@@ -24,8 +24,9 @@ After the basic version works:
 
 - [x] Random damage (`rand()`)
 - [ ] Inventory system (`vector`)
-- [ ] Multiple enemies
-- [ ] Save/load system (files)
+- [x] Multiple enemies
+- [x] Save system
+- [ ] load system (files)
 - [ ] Skills
 - [ ] XP and leveling
 - [ ] Random enemy spawn when exploring
@@ -36,7 +37,7 @@ After the basic version works:
 - [x] Make player + enemy
 - [x] Make combat loop
 - [x] Add random damage
-- [ ] Add multiple enemies
+- [x] Add multiple enemies
 - [ ] Add simple story
 
 ## Learning Goals

@@ -2,6 +2,9 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <fstream>
+#include <ctime>
+
 
 using namespace std;
 
@@ -112,24 +115,53 @@ void fightEnemy(Player& player, Enemy currentEnemy) {
     }
 }
 
+void savePlayer(const Player& player) {
+    ofstream saveFile("saves.json");
+
+        if (saveFile.fail()) {
+        cout << "Could not open the file!" << endl;
+        return;
+    }
+    saveFile << "{\n";
+    saveFile << "   \"health\": " << player.health << ",\n";
+    saveFile << "   \"attac\": " << player.attack << ",\n";
+    saveFile << "   \"xp\": " << player.xp << ",\n";
+    saveFile << "   \"level\": " << player.level << "\n";
+
+    for (const string& item : player.inventory) {
+        saveFile << "   \"Inventory\": " << item << "\n";
+    }
+    saveFile << "}\n";
+    saveFile.close();
+}
+
 int main() {
+
+
+
+
+
+
+
     srand(time(nullptr));
     Player player;
 
     while(true) {
         showMenu();
-
         int choice = readInt();
 
         if (choice == 1) {
             Enemy currentEnemy = createRandomEnemy();
             fightEnemy(player, currentEnemy);
+            savePlayer(player);
+
         }
         else if (choice == 2) {
             showStats(player);
         }
         else if (choice == 9) {
             cout << "Stopped!" << endl;
+            savePlayer(player);
             break;
         }
         else {
